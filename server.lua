@@ -3,7 +3,7 @@ require 'nn'
 require 'LanguageModel'
 
 local cmd = torch.CmdLine()
-cmd:option('-checkpoint', '/home/robin/dev/checkpoints/juliet_70000.t7')
+cmd:option('-checkpoint', '/home/robin/dev/checkpoints/juliet_70000.t7') -- this default will obviously not work for you
 cmd:option('-word_limit_short', 3)
 cmd:option('-word_limit_long', 20)
 cmd:option('-port', 8080)
@@ -75,12 +75,14 @@ app.get('/generate', function(req, res)
     end
   end
 
+  local elapsed = string.format('%.2f', os.clock() - t0)
+
   print('Generated ' .. #generated .. ' sentences from start text:')
   print('  ' .. start_text)
   print('Skipped ' .. skip_num .. ' sentences')
-  print('Took ' .. string.format('%.2f', os.clock() - t0) .. ' seconds')
+  print('Took ' .. elapsed .. ' seconds')
 
-  res.json{sentences=generated, time=elapsed}
+  res.json{start_text=start_text, sentences=generated, time=elapsed}
 end)
 
 app.listen()
