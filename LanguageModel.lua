@@ -146,61 +146,75 @@ end
 
 
 --[[
-Sample from the language model. Note that this will reset the states of the
-underlying RNNs.
+RS edit
+
+Sample from the language model until it reaches a terminator character.
 
 Inputs:
-- init: String of length T0
-- max_length: Number of characters to sample
+- start_text: string, can be ""
+- terminator_chars: class of chars in Lua match format, e.g. "[!?\\.]" (note the double escape, ugh)
+- min_num_words: if terminator char reached before this threshold, keep going until the next one
+
+Note temperature table; probably worth fiddling with.
 
 Returns:
-- sampled: (1, max_length) array of integers, where the first part is init.
+- the generated string!
 --]]
-function LM:sample(kwargs)
-  local T = utils.get_kwarg(kwargs, 'length', 100)
-  local start_text = utils.get_kwarg(kwargs, 'start_text', '')
-  local verbose = utils.get_kwarg(kwargs, 'verbose', 0)
-  local sample = utils.get_kwarg(kwargs, 'sample', 1)
-  local temperature = utils.get_kwarg(kwargs, 'temperature', 1)
 
-  local sampled = torch.LongTensor(1, T)
+function LM:sample(start_text, terminator_chars, min_num_words)
   self:resetStates()
+  local scores
 
-  local scores, first_t
   if #start_text > 0 then
-    if verbose > 0 then
-      print('Seeding with: "' .. start_text .. '"')
-    end
+    -- warm up model with start text (but don't add to sampled string)
     local x = self:encode_string(start_text):view(1, -1)
-    local T0 = x:size(2)
-    sampled[{{}, {1, T0}}]:copy(x)
+    local T0 = x:size(2) -- RS: I definitely do not understand this part
     scores = self:forward(x)[{{}, {T0, T0}}]
-    first_t = T0 + 1
   else
-    if verbose > 0 then
-      print('Seeding with uniform probabilities')
-    end
     local w = self.net:get(1).weight
     scores = w.new(1, 1, self.vocab_size):fill(1)
-    first_t = 1
   end
-  
-  local _, next_char = nil, nil
-  for t = first_t, T do
-    if sample == 0 then
-      _, next_char = scores:max(3)
-      next_char = next_char[{{}, {}, 1}]
-    else
-       local probs = torch.div(scores, temperature):double():exp():squeeze()
-       probs:div(torch.sum(probs))
-       next_char = torch.multinomial(probs, 1):view(1, 1)
+
+  local terminated = false
+  local num_words_approx = 1
+
+  local temps = {0.5, 0.6, 0.7, 0.8, 0.9}
+  local temp = temps[math.random(#temps)] -- for this run
+
+  local next_char_idx = nil
+  local next_char = nil
+  local sampled_string = ''
+
+  local max_length_to_generate = 140 -- seems reasonable
+
+  while (not terminated) and (#sampled_string < max_length_to_generate) do
+
+    local probs = torch.div(scores, temp):double():exp():squeeze()
+    probs:div(torch.sum(probs))
+    next_char_idx = torch.multinomial(probs, 1):view(1, 1)
+    scores = self:forward(next_char_idx)
+
+    next_char = self.idx_to_token[next_char_idx[1][1]]
+
+    -- sampled_text:resize(1, length_so_far)
+    -- sampled_text[{{}, {length_so_far, length_so_far}}]:copy(next_char)
+
+    sampled_string = sampled_string .. next_char
+
+    if next_char == ' ' then
+      num_words_approx = num_words_approx + 1 -- close enough
     end
-    sampled[{{}, {t, t}}]:copy(next_char)
-    scores = self:forward(next_char)
+
+    if next_char:match(terminator_chars) then
+      if num_words_approx > min_num_words then
+        terminated = true
+      end
+    end
+
   end
 
   self:resetStates()
-  return self:decode_string(sampled[1])
+  return sampled_string
 end
 
 

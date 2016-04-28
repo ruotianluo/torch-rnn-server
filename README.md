@@ -1,6 +1,23 @@
 # RS edit
 I'm going to put my patches to Justin Johnson's wonderful torch-rnn here.
 
+Two changes:
+1. Here, the `sample` function has different arguments, and crucially, it stops when one of a supplied set of terminator characters (e.g. ".") is reached. The idea is to supply "sentence completions."
+2. Those completions are available via a little JSON server powered by the very slick [Waffle library](https://github.com/benglard/waffle).
+
+So, after your normal torch-rnn installation and training (detailed below), you'll need to add
+
+```
+> (sudo) luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec
+> (sudo) luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec
+```
+
+Start the server with `th server.lua`
+
+Then try `curl "http://0.0.0.0/generate/start_text=it%20was%20a&n=3"`
+
+Standard torch-rnn README continues below.
+
 # torch-rnn
 torch-rnn provides high-performance, reusable RNN and LSTM modules for torch7, and uses these modules for character-level
 language modeling similar to [char-rnn](https://github.com/karpathy/char-rnn).
@@ -8,7 +25,7 @@ language modeling similar to [char-rnn](https://github.com/karpathy/char-rnn).
 You can find documentation for the RNN and LSTM modules [here](doc/modules.md); they have no dependencies other than `torch`
 and `nn`, so they should be easy to integrate into existing projects.
 
-Compared to char-rnn, torch-rnn is up to **1.9x faster** and uses up to **7x less memory**. For more details see 
+Compared to char-rnn, torch-rnn is up to **1.9x faster** and uses up to **7x less memory**. For more details see
 the [Benchmark](#benchmarks) section below.
 
 
@@ -115,7 +132,7 @@ You can run the training script like this:
 th train.lua -input_h5 my_data.h5 -input_json my_data.json
 ```
 
-This will read the data stored in `my_data.h5` and `my_data.json`, run for a while, and save checkpoints to files with 
+This will read the data stored in `my_data.h5` and `my_data.json`, run for a while, and save checkpoints to files with
 names like `cv/checkpoint_1000.t7`.
 
 You can change the RNN model type, hidden state size, and number of RNN layers like this:
@@ -147,14 +164,14 @@ There are more flags you can use to configure sampling; [read about them here](d
 
 # Benchmarks
 To benchmark `torch-rnn` against `char-rnn`, we use each to train LSTM language models for the tiny-shakespeare dataset
-with 1, 2 or 3 layers and with an RNN size of 64, 128, 256, or 512. For each we use a minibatch size of 50, a sequence 
-length of 50, and no dropout. For each model size and for both implementations, we record the forward/backward times and 
-GPU memory usage over the first 100 training iterations, and use these measurements to compute the mean time and memory 
+with 1, 2 or 3 layers and with an RNN size of 64, 128, 256, or 512. For each we use a minibatch size of 50, a sequence
+length of 50, and no dropout. For each model size and for both implementations, we record the forward/backward times and
+GPU memory usage over the first 100 training iterations, and use these measurements to compute the mean time and memory
 usage.
 
 All benchmarks were run on a machine with an Intel i7-4790k CPU, 32 GB main memory, and a Titan X GPU.
 
-Below we show the forward/backward times for both implementations, as well as the mean speedup of `torch-rnn` over 
+Below we show the forward/backward times for both implementations, as well as the mean speedup of `torch-rnn` over
 `char-rnn`. We see that `torch-rnn` is faster than `char-rnn` at all model sizes, with smaller models giving a larger
 speedup; for a single-layer LSTM with 128 hidden units, we achieve a **1.9x speedup**; for larger models we achieve about
 a 1.4x speedup.

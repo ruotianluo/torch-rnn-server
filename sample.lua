@@ -3,21 +3,16 @@ require 'nn'
 
 require 'LanguageModel'
 
-
 local cmd = torch.CmdLine()
-cmd:option('-checkpoint', 'cv/checkpoint_4000.t7')
-cmd:option('-length', 2000)
+cmd:option('-checkpoint', '/home/robin/dev/checkpoints/juliet_70000.t7')
 cmd:option('-start_text', '')
-cmd:option('-sample', 1)
-cmd:option('-temperature', 1)
 cmd:option('-gpu', 0)
-cmd:option('-gpu_backend', 'cuda')
-cmd:option('-verbose', 0)
 local opt = cmd:parse(arg)
-
 
 local checkpoint = torch.load(opt.checkpoint)
 local model = checkpoint.model
+
+-- note: i don't use this script anymore; might be funky
 
 local msg
 if opt.gpu >= 0 and opt.gpu_backend == 'cuda' then
@@ -34,9 +29,10 @@ elseif opt.gpu >= 0 and opt.gpu_backend == 'opencl' then
 else
   msg = 'Running in CPU mode'
 end
-if opt.verbose == 1 then print(msg) end
+
+print(msg)
 
 model:evaluate()
 
-local sample = model:sample(opt)
+local sample = model:sample(opt.start_text, '[!?\\.]', 3)
 print(sample)
