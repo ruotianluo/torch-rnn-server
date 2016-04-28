@@ -3,7 +3,7 @@ I'm going to put my patches to Justin Johnson's wonderful torch-rnn here.
 
 Two changes:
 
-1. Here, the `sample` function has different arguments, and crucially, it stops when one of a supplied set of terminator characters (e.g. ".") is reached. The idea is to supply "sentence completions."
+1. Here, the `sample` function has different arguments, and crucially, it stops when one of a supplied set of terminator characters (e.g. ".") is reached. The idea is to provide "sentence completions."
 
 2. Those completions are available via a little JSON server powered by the very slick [Waffle library](https://github.com/benglard/waffle).
 
