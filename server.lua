@@ -49,15 +49,15 @@ app.get('/', function(req, res)
 end)
 
 app.get('/generate', function(req, res)
-  local start_text = req.url.args.start_text
-  if start_text ~= nil then -- lua's 'not equals' is weird
-    start_text = url_decode(start_text:lower():gsub('\n',''))
-  else
-    start_text = ''
+  local original_start_text = req.url.args.start_text
+  local processed_start_text = ''
+  if original_start_text ~= nil then -- lua's 'not equals' is weird
+    processed_start_text = url_decode(original_start_text:lower()):gsub("%s+"," ")
   end
 
   local target_num = tonumber(req.url.args.n)
   if target_num == nil then target_num = 1 end
+  target_num = math.min(target_num, 10)
 
   local skip_num = 0
   local t0 = os.clock()
@@ -65,7 +65,7 @@ app.get('/generate', function(req, res)
   local generated = {}
 
   while #generated < target_num do
-    local sentence = model:sample(start_text, '[!?\\.]', 3)
+    local sentence = model:sample(processed_start_text, '[!?\\.]', 3)
     local num_words = 0
     for word in (sentence..' '):gmatch('(.-) ') do num_words = num_words + 1 end -- a bit of a mess
     if (num_words >= opt.word_limit_short) and (num_words <= opt.word_limit_long) then
@@ -78,11 +78,11 @@ app.get('/generate', function(req, res)
   local elapsed = string.format('%.2f', os.clock() - t0)
 
   print('Generated ' .. #generated .. ' sentences from start text:')
-  print('  ' .. start_text)
+  print('  ' .. processed_start_text)
   print('Skipped ' .. skip_num .. ' sentences')
   print('Took ' .. elapsed .. ' seconds')
 
-  res.json{start_text=start_text, sentences=generated, time=elapsed}
+  res.json{start_text=original_start_text, completions=generated, time=elapsed}
 end)
 
 app.listen()
