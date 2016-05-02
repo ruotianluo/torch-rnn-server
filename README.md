@@ -16,7 +16,7 @@ So, after your normal torch-rnn installation and training (detailed below), you'
 
 Start the server with `th server.lua`
 
-Then try `curl "http://0.0.0.0/generate/start_text=it%20was%20a&n=3"`
+Then try `curl "http://0.0.0.0/generate?start_text=it%20was%20a&n=3"`
 
 Standard torch-rnn README continues below.
 
