@@ -3,7 +3,7 @@ require 'nn'
 require 'LanguageModel'
 
 local cmd = torch.CmdLine()
-cmd:option('-checkpoint', '/home/robin/dev/checkpoints/juliet_70000.t7') -- this default will obviously not work for you
+cmd:option('-checkpoint', 'checkpoints/scifi_model.t7') -- http://from.robinsloan.com/rnn-writer/scifi-model.zip
 cmd:option('-word_limit_short', 3)
 cmd:option('-word_limit_long', 20)
 cmd:option('-port', 8080)

@@ -1,3 +1,5 @@
 *.swp
+*.t7
+*.json
 .ipynb_checkpoints/
 .env/

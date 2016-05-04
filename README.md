@@ -1,24 +1,30 @@
-# RS edit
-I'm going to put my patches to Justin Johnson's wonderful torch-rnn here.
+# torch-rnn-server
 
-Two changes:
+This is a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` package:
 
 1. Here, the `sample` function has different arguments, and crucially, it stops when one of a supplied set of terminator characters (e.g. ".") is reached. The idea is to provide "sentence completions."
 
-2. Those completions are available via a little JSON server powered by the very slick [Waffle library](https://github.com/benglard/waffle).
+2. Those completions are available via a little HTTP server powered by the very slick [Waffle library](https://github.com/benglard/waffle).
 
-So, after your normal torch-rnn installation and training (detailed below), you'll need to add
+First you'll need to install `torch-rnn` and train it on a text corpus; those instructions are all below, in the original `torch-rnn` README. Alternatively, you can download a pre-trained model. From the root of the project:
 
-```
-> (sudo) luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec
-> (sudo) luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec
-```
+`cd checkpoints`
+`wget http://from.robinsloan.com/rnn-writer/scifi-model.zip`
+`unzip scifi-model.zip`
 
-Start the server with `th server.lua`
+After all that, there are two additional steps to get the Waffle web server package:
 
-Then try `curl "http://0.0.0.0/generate?start_text=it%20was%20a&n=3"`
+`luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec`
+`luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec`
 
-Standard torch-rnn README continues below.
+Finally, you can start the server with `th server.lua` and try `curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"` -- you should get a JSON response.
+
+Then, it's onward to [rnn-writer](https://github.com/robinsloan/rnn-writer)!
+
+**Alternative #1:**
+**Alternative #2:** I'm making an API available through which you can access a trained RNN running on a beefy computer... sitting under a desk... in my office. You'll find more information on the [rnn-writer](https://github.com/robinsloan/rnn-writer) page. This is intended as an alternative for those who are interested in trying these tools but find the prospect of slogging through a Torch installation too daunting.
+
+Standard `torch-rnn` README continues below.
 
 # torch-rnn
 torch-rnn provides high-performance, reusable RNN and LSTM modules for torch7, and uses these modules for character-level
