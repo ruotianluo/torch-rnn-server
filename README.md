@@ -1,5 +1,6 @@
 # torch-rnn-server
 
+More conte
 This is a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` package:
 
 1. Here, the `sample` function has different arguments, and crucially, it stops when one of a supplied set of terminator characters (e.g. ".") is reached. The idea is to provide "sentence completions."
@@ -8,14 +9,18 @@ This is a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` p
 
 First you'll need to install `torch-rnn` and train it on a text corpus; those instructions are all below, in the original `torch-rnn` README. Alternatively, you can download a pre-trained model. From the root of the project:
 
-`cd checkpoints`
-`wget http://from.robinsloan.com/rnn-writer/scifi-model.zip`
-`unzip scifi-model.zip`
+```
+cd checkpoints
+wget http://from.robinsloan.com/rnn-writer/scifi-model.zip`
+unzip scifi-model.zip
+```
 
 After all that, there are two additional steps to get the Waffle web server package:
 
-`luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec`
-`luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec`
+```
+luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec
+luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec
+```
 
 Finally, you can start the server with `th server.lua` and try `curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"` -- you should get a JSON response.
 
