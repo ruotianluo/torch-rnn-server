@@ -1,6 +1,7 @@
 # torch-rnn-server
 
-More conte
+I explain what this project is all about [here](https://www.robinsloan.com/note/writing-with-the-machine).
+
 This is a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` package:
 
 1. Here, the `sample` function has different arguments, and crucially, it stops when one of a supplied set of terminator characters (e.g. ".") is reached. The idea is to provide "sentence completions."
