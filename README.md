@@ -1,6 +1,6 @@
 # torch-rnn-server
 
-This is a small server that works with the Atom package `[rnn-writer](https://github.com/robinsloan/rnn-writer)` to provide responsive, inline “autocomplete” powered by a recurrent neural network trained on a corpus of sci-fi stories, or another corpus of your choosing.
+This is a small server that works with the Atom package [`rnn-writer`](https://github.com/robinsloan/rnn-writer) to provide responsive, inline “autocomplete” powered by a recurrent neural network trained on a corpus of sci-fi stories, or another corpus of your choosing.
 
 More accurately: it's a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` package.
 
@@ -10,7 +10,7 @@ I explain what this project is all about [here](https://www.robinsloan.com/note/
 
 There are a couple of different ways to get `torch-rnn-server` running, but no matter what, you'll need to install Torch, the scientific computing framework that powers the whole operation. Those instructions are below, in the original `torch-rnn` README.
 
-After completing those steps, you'll need to install Ben Glard's `[waffle](https://github.com/benglard/waffle)` package to power the web server:
+After completing those steps, you'll need to install Ben Glard's [`waffle`](https://github.com/benglard/waffle) project to power the web server:
 
 ```
 luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec
@@ -41,7 +41,7 @@ and try
 curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"
 ```
 
-If you see a JSON response, it means everything is working, and it's onward to [rnn-writer](https://github.com/robinsloan/rnn-writer)!
+If you see a JSON response, it means everything is working, and it's onward to [`rnn-writer`](https://github.com/robinsloan/rnn-writer)!
 
 Standard `torch-rnn` README continues below.
 
