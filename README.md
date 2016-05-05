@@ -19,13 +19,15 @@ luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle
 
 ###Training and models
 
-After installing Torch and all of `torch-rnn`'s dependencies, you can train a model on a corpus of your choosing; those instructions are below, in the original `torch-rnn` README. **Alternatively, you can download a pre-trained model.** From the root of the project:
+After installing Torch and all of `torch-rnn`'s dependencies, you can train a model on a corpus of your choosing; those instructions are below, in the original `torch-rnn` README. **Alternatively, you can download a pre-trained model** trained on ~150MB of old sci-fi stories:
 
 ```
 cd checkpoints
 wget http://from.robinsloan.com/rnn-writer/scifi-model.zip
 unzip scifi-model.zip
 ```
+
+(You can read a bit more about the corpus and find a link to download it [here](https://www.robinsloan.com/note/writing-with-the-machine).)
 
 ###Running the server
 
