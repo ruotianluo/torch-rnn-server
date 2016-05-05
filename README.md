@@ -23,13 +23,13 @@ After installing Torch and all of `torch-rnn`'s dependencies, you can train a mo
 
 ```
 cd checkpoints
-wget http://from.robinsloan.com/rnn-writer/scifi-model.zip`
+wget http://from.robinsloan.com/rnn-writer/scifi-model.zip
 unzip scifi-model.zip
 ```
 
 ###Running the server
 
-Finally, you can start the server with
+Finally! You can start the server with
 
 ```
 th server.lua
@@ -41,7 +41,7 @@ and try
 curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"
 ```
 
-If you see a JSON response, it means everything is working, and it's onward to [`rnn-writer`](https://github.com/robinsloan/rnn-writer)!
+If you see a JSON response offering strange sentences, it means everything is working, and it's onward to [`rnn-writer`](https://github.com/robinsloan/rnn-writer)!
 
 Standard `torch-rnn` README continues below.
 
