@@ -1,5 +1,4 @@
-*.swp
 *.t7
 *.json
-.ipynb_checkpoints/
-.env/
+*.zip
+.DS_Store
