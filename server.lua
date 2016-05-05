@@ -3,7 +3,7 @@ require 'nn'
 require 'LanguageModel'
 
 local cmd = torch.CmdLine()
-cmd:option('-checkpoint', 'checkpoints/scifi_model.t7') -- http://from.robinsloan.com/rnn-writer/scifi-model.zip
+cmd:option('-checkpoint', '/home/robin/dev/checkpoints/sf3_1_20000.t7')
 cmd:option('-word_limit_short', 3)
 cmd:option('-word_limit_long', 20)
 cmd:option('-port', 8080)
@@ -45,7 +45,7 @@ app.set('port', opt.port)
 app.set('debug', true)
 
 app.get('/', function(req, res)
-  res.json{message='Nobody here but us chickens!'}
+  res.json{message='Have fun!'}
 end)
 
 app.get('/generate', function(req, res)
