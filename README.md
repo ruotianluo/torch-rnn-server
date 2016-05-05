@@ -6,7 +6,7 @@ More accurately: it's a set of shims laid beneath Justin Johnson's indispensable
 
 I explain what this project is all about [here](https://www.robinsloan.com/note/writing-with-the-machine); it's probably worth reading that before continuing.
 
-#Installation
+###Installation
 
 There are a couple of different ways to get `torch-rnn-server` running, but no matter what, you'll need to install Torch, the scientific computing framework that powers the whole operation. Those instructions are below, in the original `torch-rnn` README.
 
@@ -17,7 +17,7 @@ luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua
 luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec
 ```
 
-#Training and models
+###Training and models
 
 After installing Torch and all of `torch-rnn`'s dependencies, you can train a model on a corpus of your choosing; those instructions are below, in the original `torch-rnn` README. **Alternatively, you can download a pre-trained model.** From the root of the project:
 
@@ -27,7 +27,7 @@ wget http://from.robinsloan.com/rnn-writer/scifi-model.zip`
 unzip scifi-model.zip
 ```
 
-#Running the server
+###Running the server
 
 Finally, you can start the server with
 
@@ -59,7 +59,9 @@ the [Benchmark](#benchmarks) section below.
 # Installation
 
 ## System setup
+
 **`torch-rnn-server note`: You can skip this if you're using a pretrained model.**
+
 You'll need to install the header files for Python 2.7 and the HDF5 library. On Ubuntu you should be able to install
 like this:
 
@@ -69,7 +71,9 @@ sudo apt-get install libhdf5-dev
 ```
 
 ## Python setup
+
 **`torch-rnn-server note`: You can skip this if you're using a pretrained model.**
+
 The preprocessing script is written in Python 2.7; its dependencies are in the file `requirements.txt`.
 You can install these dependencies in a virtual environment like this:
 
@@ -82,7 +86,9 @@ deactivate                       # Exit the virtual environment
 ```
 
 ## Lua setup
+
 **`torch-rnn-server note`: You can't skip this :(**
+
 The main modeling code is written in Lua using [torch](http://torch.ch); you can find installation instructions
 [here](http://torch.ch/docs/getting-started.html#_). You'll need the following Lua packages:
 
@@ -102,14 +108,18 @@ luarocks install optim
 luarocks install lua-cjson
 
 # We need to install torch-hdf5 from GitHub
+
 **`torch-rnn-server note`: You can skip this if you're using a pretrained model.**
+
 git clone https://github.com/deepmind/torch-hdf5
 cd torch-hdf5
 luarocks make hdf5-0-0.rockspec
 ```
 
 ### CUDA support (Optional)
-**`torch-rnn-server note`: You can't skip this :(**
+
+**`torch-rnn-server note`: If you skip this, everything will be slowww :(**
+
 To enable GPU acceleration with CUDA, you'll need to install CUDA 6.5 or higher and the following Lua packages:
 - [torch/cutorch](https://github.com/torch/cutorch)
 - [torch/cunn](https://github.com/torch/cunn)
@@ -136,7 +146,7 @@ luarocks install clnn
 ## OSX Installation
 Jeff Thompson has written a very detailed installation guide for OSX that you [can find here](http://www.jeffreythompson.org/blog/2016/03/25/torch-rnn-mac-install/).
 
-**`torch-rnn-server note`: You can stop here if you're using a pretrained model.**
+**`torch-rnn-server note`: You can STOP HERE if you're using a pretrained model.**
 
 # Usage
 To train a model and use it to generate new text, you'll need to follow three simple steps:
