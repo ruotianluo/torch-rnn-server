@@ -14,7 +14,7 @@ end
 start_text = ARGV[0].to_s
 
 puts ""
-puts "Starting server..."
+puts "Starting torch-rnn-server..."
 pid = spawn("th server.lua", :out=>"/dev/null")
 Process.detach(pid)
 

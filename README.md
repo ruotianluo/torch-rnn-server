@@ -1,14 +1,25 @@
 # torch-rnn-server
 
-I explain what this project is all about [here](https://www.robinsloan.com/note/writing-with-the-machine).
+This is a small server that works with the Atom package `[rnn-writer](https://github.com/robinsloan/rnn-writer)` to provide responsive, inline “autocomplete” powered by a recurrent neural network trained on a corpus of sci-fi stories, or another corpus of your choosing.
 
-This is a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` package:
+More accurately: it's a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` package.
 
-1. Here, the `sample` function has different arguments, and crucially, it stops when one of a supplied set of terminator characters (e.g. ".") is reached. The idea is to provide "sentence completions."
+I explain what this project is all about [here](https://www.robinsloan.com/note/writing-with-the-machine); it's probably worth reading that before continuing.
 
-2. Those completions are available via a little HTTP server powered by the very slick [Waffle library](https://github.com/benglard/waffle).
+#Installation
 
-First you'll need to install `torch-rnn` and train it on a text corpus; those instructions are all below, in the original `torch-rnn` README. Alternatively, you can download a pre-trained model. From the root of the project:
+There are a couple of different ways to get `torch-rnn-server` running, but no matter what, you'll need to install Torch, the scientific computing framework that powers the whole operation. Those instructions are below, in the original `torch-rnn` README.
+
+After completing those steps, you'll need to install Ben Glard's `[waffle](https://github.com/benglard/waffle)` package to power the web server:
+
+```
+luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec
+luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec
+```
+
+#Training and models
+
+After installing Torch and all of `torch-rnn`'s dependencies, you can train a model on a corpus of your choosing; those instructions are below, in the original `torch-rnn` README. **Alternatively, you can download a pre-trained model.** From the root of the project:
 
 ```
 cd checkpoints
@@ -16,19 +27,21 @@ wget http://from.robinsloan.com/rnn-writer/scifi-model.zip`
 unzip scifi-model.zip
 ```
 
-After all that, there are two additional steps to get the Waffle web server package:
+#Running the server
+
+Finally, you can start the server with
 
 ```
-luarocks install https://raw.githubusercontent.com/benglard/htmlua/master/htmlua-scm-1.rockspec
-luarocks install https://raw.githubusercontent.com/benglard/waffle/master/waffle-scm-1.rockspec
+th server.lua
 ```
 
-Finally, you can start the server with `th server.lua` and try `curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"` -- you should get a JSON response.
+and try
 
-Then, it's onward to [rnn-writer](https://github.com/robinsloan/rnn-writer)!
+```
+curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"
+```
 
-**Alternative #1:**
-**Alternative #2:** I'm making an API available through which you can access a trained RNN running on a beefy computer... sitting under a desk... in my office. You'll find more information on the [rnn-writer](https://github.com/robinsloan/rnn-writer) page. This is intended as an alternative for those who are interested in trying these tools but find the prospect of slogging through a Torch installation too daunting.
+If you see a JSON response, it means everything is working, and it's onward to [rnn-writer](https://github.com/robinsloan/rnn-writer)!
 
 Standard `torch-rnn` README continues below.
 
@@ -46,6 +59,7 @@ the [Benchmark](#benchmarks) section below.
 # Installation
 
 ## System setup
+**`torch-rnn-server note`: You can skip this if you're using a pretrained model.**
 You'll need to install the header files for Python 2.7 and the HDF5 library. On Ubuntu you should be able to install
 like this:
 
@@ -55,6 +69,7 @@ sudo apt-get install libhdf5-dev
 ```
 
 ## Python setup
+**`torch-rnn-server note`: You can skip this if you're using a pretrained model.**
 The preprocessing script is written in Python 2.7; its dependencies are in the file `requirements.txt`.
 You can install these dependencies in a virtual environment like this:
 
@@ -67,6 +82,7 @@ deactivate                       # Exit the virtual environment
 ```
 
 ## Lua setup
+**`torch-rnn-server note`: You can't skip this :(**
 The main modeling code is written in Lua using [torch](http://torch.ch); you can find installation instructions
 [here](http://torch.ch/docs/getting-started.html#_). You'll need the following Lua packages:
 
@@ -86,12 +102,14 @@ luarocks install optim
 luarocks install lua-cjson
 
 # We need to install torch-hdf5 from GitHub
+**`torch-rnn-server note`: You can skip this if you're using a pretrained model.**
 git clone https://github.com/deepmind/torch-hdf5
 cd torch-hdf5
 luarocks make hdf5-0-0.rockspec
 ```
 
 ### CUDA support (Optional)
+**`torch-rnn-server note`: You can't skip this :(**
 To enable GPU acceleration with CUDA, you'll need to install CUDA 6.5 or higher and the following Lua packages:
 - [torch/cutorch](https://github.com/torch/cutorch)
 - [torch/cunn](https://github.com/torch/cunn)
@@ -117,6 +135,8 @@ luarocks install clnn
 
 ## OSX Installation
 Jeff Thompson has written a very detailed installation guide for OSX that you [can find here](http://www.jeffreythompson.org/blog/2016/03/25/torch-rnn-mac-install/).
+
+**`torch-rnn-server note`: You can stop here if you're using a pretrained model.**
 
 # Usage
 To train a model and use it to generate new text, you'll need to follow three simple steps:
