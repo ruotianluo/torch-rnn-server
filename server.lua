@@ -80,7 +80,7 @@ app.get('/generate', function(req, res)
   print('Generated ' .. #generated .. ' sentences from start text:')
   print('  ' .. processed_start_text)
   print('Skipped ' .. skip_num .. ' sentences')
-  print('Took ' .. elapsed .. ' seconds')
+  print('Took ' .. elapsed .. ' of some undetermined unit of time')
 
   res.json{start_text=original_start_text, completions=generated, time=elapsed}
 end)
