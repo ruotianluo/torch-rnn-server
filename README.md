@@ -1,6 +1,6 @@
 # torch-rnn-server
 
-This is a small server that works with the Atom package [`rnn-writer`](https://github.com/robinsloan/rnn-writer) to provide responsive, inline “autocomplete” powered by a recurrent neural network trained on a corpus of sci-fi stories, or another corpus of your choosing.
+This is a small server that works with the Atom package [`rnn-writer`](https://github.com/robinsloan/rnn-writer) to provide responsive, inline "autocomplete" powered by a recurrent neural network trained on a corpus of sci-fi stories, or another corpus of your choosing.
 
 More accurately: it's a set of shims laid beneath Justin Johnson's indispensable `torch-rnn` package.
 
