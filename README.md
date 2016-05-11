@@ -32,6 +32,9 @@ unzip scifi-model.zip
 
 (You can read a bit more about the corpus and find a link to download it [here](https://www.robinsloan.com/note/writing-with-the-machine).)
 
+You could also use arxiv_model.t7 which is trained on cs.CV category arxiv
+papers.
+
 ###Running the server
 
 Finally! You can start the server with

@@ -9,3 +9,5 @@ arxiv_data.txt
 pdf/
 txt/
 *~
+!checkpoints/arxiv_model.t7
+
