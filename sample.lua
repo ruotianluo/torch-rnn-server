@@ -38,5 +38,5 @@ if opt.verbose == 1 then print(msg) end
 
 model:evaluate()
 
-local sample = model:sample('', '', 3)
+local sample = model:sample('This project is a web interface that attempts to tame the overwhelming flood of papers on Arxiv.', '', 2000)
 print(sample)
