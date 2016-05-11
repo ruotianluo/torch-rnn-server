@@ -1,3 +1,6 @@
+# Before all
+This is a combination of torch-rnn-server and arxiv-sanity-preserver. Here I use the arxiv-sanity code to download the pdf and process the pdfs to text files. And follow the torch-rnn-server pipeline to train the model. To change the paper you want to download, change the query in `fetch_papers.py` 
+
 # torch-rnn-server
 
 This is a small server that works with the Atom package [`rnn-writer`](https://github.com/robinsloan/rnn-writer) to provide responsive, inline "autocomplete" powered by a recurrent neural network trained on a corpus of sci-fi stories, or another corpus of your choosing.
@@ -153,6 +156,13 @@ Jeff Thompson has written a very detailed installation guide for OSX that you [c
 # Usage
 To train a model and use it to generate new text, you'll need to follow three simple steps:
 
+## Step 0: Download data from arxiv and process the raw data.
+
+- Run `fetch_papers.py` to query arxiv API and create a file db.p that contains all information for each paper. This script is where you would modify the query, indicating which parts of arxiv you'd like to use. Note that if you're trying to pull too many papers arxiv will start to rate limit you. You may have to run the script multiple times, and I recommend using the arg --start_index to restart where you left off when you were last interrupted by arxiv.
+- Run `download_pdf.py`, which iterates over all papers in parsed pickle and downloads the papers into folder pdf
+- Run `parse_pdf_to_text.py` to export all text from pdfs to files in txt 
+- Run `combine_pdfs.py` to combine all the pdf texts to a single txt file.
+
 ## Step 1: Preprocess the data
 You can use any text file for training models. Before training, you'll need to preprocess the data using the script
 `scripts/preprocess.py`; this will generate an HDF5 file and JSON file containing a preprocessed version of the data.
@@ -161,9 +171,9 @@ If you have training data stored in `my_data.txt`, you can run the script like t
 
 ```bash
 python scripts/preprocess.py \
-  --input_txt my_data.txt \
-  --output_h5 my_data.h5 \
-  --output_json my_data.json
+  --input_txt arxiv_data.txt \
+  --output_h5 arxiv_data.h5 \
+  --output_json arxiv_data.json
 ```
 
 This will produce files `my_data.h5` and `my_data.json` that will be passed to the training script.
@@ -175,16 +185,16 @@ After preprocessing the data, you'll need to train the model using the `train.lu
 You can run the training script like this:
 
 ```bash
-th train.lua -input_h5 my_data.h5 -input_json my_data.json
+th train.lua -input_h5 arxiv_data.h5 -input_json arxiv_data.json
 ```
 
-This will read the data stored in `my_data.h5` and `my_data.json`, run for a while, and save checkpoints to files with
-names like `cv/checkpoint_1000.t7`.
+This will read the data stored in `arxiv_data.h5` and `arxiv_data.json`, run for a while, and save checkpoints to files with
+names like `checkpoints/checkpoint_1000.t7`.
 
 You can change the RNN model type, hidden state size, and number of RNN layers like this:
 
 ```bash
-th train.lua -input_h5 my_data.h5 -input_json my_data.json -model_type rnn -num_layers 3 -rnn_size 256
+th train.lua -input_h5 arxiv_data.h5 -input_json arxiv_data.json -model_type rnn -num_layers 3 -rnn_size 256
 ```
 
 By default this will run in GPU mode using CUDA; to run in CPU-only mode, add the flag `-gpu -1`.
@@ -197,7 +207,7 @@ There are many more flags you can use to configure training; [read about them he
 After training a model, you can generate new text by sampling from it using the script `sample.lua`. Run it like this:
 
 ```bash
-th sample.lua -checkpoint cv/checkpoint_10000.t7 -length 2000
+th sample.lua -checkpoint checkpoints/checkpoint_10000.t7
 ```
 
 This will load the trained checkpoint `cv/checkpoint_10000.t7` from the previous step, sample 2000 characters from it,

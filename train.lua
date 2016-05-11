@@ -240,6 +240,13 @@ for i = start_i + 1, num_iterations do
     local filename = string.format('%s_%d.t7', opt.checkpoint_name, i)
     paths.mkdir(paths.dirname(filename))
     torch.save(filename, checkpoint)
+
+    if torch.sum(torch.Tensor(val_loss_history):lt(val_loss)) == 0 then
+      local filename = string.format('%s.t7', opt.checkpoint_name)
+      paths.mkdir(paths.dirname(filename))
+      torch.save(filename, checkpoint)
+    end
+
     model:type(dtype)
     params, grad_params = model:getParameters()
     collectgarbage()

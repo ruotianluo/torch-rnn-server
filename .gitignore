@@ -1,4 +1,11 @@
+*.h5
+*.p
+*.pyc
+arxiv_data.txt
 *.t7
 *.json
 *.zip
 .DS_Store
+pdf/
+txt/
+*~
