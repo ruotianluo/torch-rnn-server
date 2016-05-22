@@ -31,16 +31,28 @@ unzip scifi-model.zip
 
 ###Running the server
 
-Finally! You can start the server with
+Finally! If you setup tourch with CUDA support you can start the server with
 
 ```
 th server.lua
 ```
 
-and try
+If you setup torch with OpenCL support you can start the server with
 
 ```
-curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"
+th server.lua -gpu_backend opencl
+```
+
+If you get an error when starting the server there is a good chance you're not setup to run the with GPU support. To run the server with your CPU instead use:
+
+```
+th server.lua -gpu -1
+```
+
+Once the server is running try
+
+```
+curl "http://0.0.0.0:8080/generate?start_text=It%20was%20a%20dark&n=3"
 ```
 
 If you see a JSON response offering strange sentences, it means everything is working, and it's onward to [`rnn-writer`](https://github.com/robinsloan/rnn-writer)!
