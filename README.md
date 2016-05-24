@@ -37,7 +37,7 @@ Finally! You can start the server with:
 th server.lua
 ```
 
-Or, if that gives you an error but your system supports OpenCL---this is the case with many Macs---you can start the server with:
+Or, if that gives you an error but your system supports OpenCL (this is the case with many Macs) you can start the server with:
 
 ```
 th server.lua -gpu_backend opencl
