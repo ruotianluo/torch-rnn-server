@@ -31,25 +31,25 @@ unzip scifi-model.zip
 
 ###Running the server
 
-Finally! If you setup tourch with CUDA support you can start the server with
+Finally! You can start the server with:
 
 ```
 th server.lua
 ```
 
-If you setup torch with OpenCL support you can start the server with
+Or, if that gives you an error but your system supports OpenCL -- this is the case with many Macs -- you can start the server with:
 
 ```
 th server.lua -gpu_backend opencl
 ```
 
-If you get an error when starting the server there is a good chance you're not setup to run the with GPU support. To run the server with your CPU instead use:
+Or, if you're still getting an error, you can run in CPU mode:
 
 ```
 th server.lua -gpu -1
 ```
 
-Once the server is running try
+Once the server is running, try
 
 ```
 curl "http://0.0.0.0:8080/generate?start_text=It%20was%20a%20dark&n=3"
