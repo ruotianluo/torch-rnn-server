@@ -37,16 +37,28 @@ papers.
 
 ###Running the server
 
-Finally! You can start the server with
+Finally! You can start the server with:
 
 ```
 th server.lua
 ```
 
-and try
+Or, if that gives you an error but your system supports OpenCL (this is the case with many Macs) you can start the server with:
 
 ```
-curl "http://0.0.0.0/generate?start_text=It%20was%20a%20dark&n=3"
+th server.lua -gpu_backend opencl
+```
+
+Or, if you're still getting an error, you can run in CPU mode:
+
+```
+th server.lua -gpu -1
+```
+
+Once the server is running, try
+
+```
+curl "http://0.0.0.0:8080/generate?start_text=It%20was%20a%20dark&n=3"
 ```
 
 If you see a JSON response offering strange sentences, it means everything is working, and it's onward to [`rnn-writer`](https://github.com/robinsloan/rnn-writer)!
